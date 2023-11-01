@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+body {
+    background-color: azure;
+    font-family: 'Quicksand', sans-serif;
+    font-size: large;
+    align-content: center;
+    background-color: #e7e7e7;
+    background-image: url('/wave');
+    background-position: bottom;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+}
+
+.main-box {
+    padding: 2%;
+    margin: 0 auto;
+    margin-top: 5%;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    text-align: center;
+    width: 75%;
+    background-color: white;
+}
