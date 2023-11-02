@@ -55,6 +55,8 @@ struct Article {
     intro: String,
     /// The content of the article.
     content: Vec<String>,
+    /// The path of the image of the article.
+    image_path: String,
 }
 
 /// a function to get an article with its id.
@@ -136,6 +138,18 @@ async fn upload_image(mut form: Form<Upload<'_>>) -> std::io::Result<()> {
     }
 }
 
+/// a function to get an image.
+#[get("/image/<path>")]
+fn get_image(path: String) -> (ContentType, File) {
+    // on envoie l'image si il existe sinon on envoie une erreur 404
+    let path = format!("static/{}", path);
+    if let Ok(file) = File::open(path) {
+        (ContentType::PNG, file)
+    } else {
+        (ContentType::HTML, File::open("webpages/404.html").unwrap())
+    }
+}
+
 /// a function to login as admin.
 #[get("/login/<password>")]
 async fn login_admin(cookies: &CookieJar<'_>, password: String) {
@@ -168,6 +182,63 @@ fn check_admin(cookies: &CookieJar<'_>) -> String {
     }
 }
 
+/// a function to get an article that return a web page.
+#[get("/article/<uid>")]
+async fn get_article_page(uid: Uuid) -> (ContentType, String) {
+    let json_data = get_article(uid).await;
+
+    if let Some(json_data) = json_data {
+        let data = json_data.into_inner();
+
+        let html_content = format!(
+            r#"
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <title>Article</title>
+            <link rel="stylesheet" href="/style">
+        </head>
+        <body>
+            <div class="nav">
+            <input type="checkbox" id="nav-check">
+            <div class="nav-header">
+                <div class="nav-title">
+                    CoCo_Sol - About Me
+                </div>
+            </div>
+            <div class="nav-btn">
+                <label for="nav-check">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </label>
+            </div>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/articles">Articles</a>
+                <a href="/images">Images</a>
+                <a href="about_me">About Me</a>
+            </div>
+        </div>
+        <main class="main-box">
+                <h1>{}</h1>
+                <img src="/api/image/{}"></img>
+            </main>
+
+        </body>
+        </html>
+        "#,
+            data.title.clone(),
+            data.image_path
+        );
+
+        (ContentType::HTML, html_content.to_owned())
+    } else {
+        (ContentType::HTML, "Article not found".to_owned())
+    }
+}
+
 /// The main function of the website.
 #[launch]
 async fn rocket() -> _ {
@@ -183,9 +254,16 @@ async fn rocket() -> _ {
             ..Default::default()
         })
         .mount("/", raw_routes())
+        .mount("/", routes![get_article_page])
         .mount(
             "/api",
-            routes![get_article, list_articles, add_article, upload_image],
+            routes![
+                get_article,
+                list_articles,
+                add_article,
+                upload_image,
+                get_image
+            ],
         )
         .mount("/admin", routes![login_admin, check_admin])
 }

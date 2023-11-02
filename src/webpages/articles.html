@@ -14,7 +14,7 @@
         <input type="checkbox" id="nav-check">
         <div class="nav-header">
             <div class="nav-title">
-                CoCo_Sol - Articles
+                CoCo_Sol - About Me
             </div>
         </div>
         <div class="nav-btn">
@@ -30,9 +30,38 @@
             <a href="/images">Images</a>
             <a href="about_me">About Me</a>
         </div>
-        <main class="main-box">
-            <h1 class="main-title">Articles</h1>
-        </main>
+    </div>
+    <main class="main-box">
+        <h1 class="main-title">Articles</h1>
+
+        <div id="content-articles"></div>
+
+        <script>
+            fetch("/api/articles").then(response => response.json()).then(data => {
+                for (id_article in data) {
+                    fetch("/api/article/" + data[id_article]).then(response => response.json()).then(article => {
+                        const content = document.getElementById("content-articles");
+                        const button = document.createElement("button");
+                        button.classList.add("article-button");
+                        button.onclick = () => window.location.href = "/article/" + data[id_article];
+
+                        const title = document.createElement("h3");
+                        title.textContent = article.title;
+                        button.appendChild(title);
+
+                        const image = document.createElement("img");
+                        image.src = "/api/image/" + article.image_path;
+                        image.classList.add("article-image");
+                        button.appendChild(image);
+
+                        content.appendChild(button);
+                    })
+                }
+            })
+        </script>
+
+
+    </main>
 </body>
 
 </html>

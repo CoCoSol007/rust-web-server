@@ -39,6 +39,43 @@ body {
 
 }
 
+#content-articles {
+    text-align: center;
+}
+
+#content-articles>button {
+    margin-top: 10px;
+    transition-duration: 0.5s;
+    width: 85%;
+    height: 50px;
+    background-color: #33003365;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+}
+
+#content-articles>button:hover {
+    width: 90%;
+    background-color: #1a001a65;
+}
+
+#content-articles>button>.article-image {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 0.3s ease, max-height 0.3s ease;
+    transition-delay: 0.3s;
+}
+
+#content-articles>button:hover>.article-image {
+    opacity: 1;
+    max-height: 250px;
+}
+
+.main-box>h1 {
+    text-align: center;
+}
+
 .url-button:hover {
     width: 30%;
 }
@@ -67,6 +104,7 @@ li {
 /* Style de l'en-tête de la barre de navigation */
 .nav>.nav-header {
     display: inline;
+    float: right;
 }
 
 .nav>.nav-header>.nav-title {
@@ -80,12 +118,13 @@ li {
 /* Style du bouton de menu (affiché sur les petits écrans) */
 .nav>.nav-btn {
     display: none;
+    float: left;
 }
 
 /* Style des liens de navigation */
 .nav>.nav-links {
     display: inline;
-    float: right;
+    float: left;
     font-size: 18px;
 }
 
@@ -112,7 +151,7 @@ li {
     .nav>.nav-btn {
         display: inline-block;
         position: absolute;
-        right: 0px;
+        left: 0px;
         top: 0px;
     }
 
