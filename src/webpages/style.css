@@ -1,25 +1,167 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 
 body {
-    background-color: azure;
+    background-color: #330033;
     font-family: 'Quicksand', sans-serif;
     font-size: large;
     align-content: center;
-    background-color: #e7e7e7;
-    background-image: url('/wave');
+    background-image: url('/background');
     background-position: bottom;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    background-size: cover;
 
 }
 
 .main-box {
+    color: #ffff;
     padding: 2%;
     margin: 0 auto;
     margin-top: 5%;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    box-shadow: #090009;
     border-radius: 4px;
-    text-align: center;
+    text-align: left;
     width: 75%;
-    background-color: white;
+    background-color: #404;
+
+}
+
+.url-button {
+    transition-duration: 0.5s;
+    width: 20%;
+    height: 50px;
+    background-color: #330033;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: large;
+
+
+}
+
+.url-button:hover {
+    width: 30%;
+}
+
+p {
+    text-align: left;
+}
+
+/* Réinitialisation des styles par défaut du navigateur */
+body,
+ul,
+li {
+    margin: 0;
+    padding: 0;
+}
+
+/* Style de la barre de navigation */
+.nav {
+    height: 50px;
+    width: 100%;
+    background-color: #404;
+    /* Couleur de fond violette avec des nuances de rouge foncé */
+    position: relative;
+}
+
+/* Style de l'en-tête de la barre de navigation */
+.nav>.nav-header {
+    display: inline;
+}
+
+.nav>.nav-header>.nav-title {
+    display: inline-block;
+    font-size: 22px;
+    color: #ffff;
+    /* Texte en blanc */
+    padding: 10px 10px 10px 10px;
+}
+
+/* Style du bouton de menu (affiché sur les petits écrans) */
+.nav>.nav-btn {
+    display: none;
+}
+
+/* Style des liens de navigation */
+.nav>.nav-links {
+    display: inline;
+    float: right;
+    font-size: 18px;
+}
+
+.nav>.nav-links>a {
+    display: inline-block;
+    padding: 13px 10px 13px 10px;
+    text-decoration: none;
+    color: #ffff;
+    /* Texte en blanc */
+}
+
+.nav>.nav-links>a:hover {
+    background-color: #330033;
+    /* Couleur de survol vers #404 */
+}
+
+/* Style de l'icône du bouton de menu (affiché sur les petits écrans) */
+.nav>#nav-check {
+    display: none;
+}
+
+/* Media query pour les petits écrans */
+@media (max-width: 600px) {
+    .nav>.nav-btn {
+        display: inline-block;
+        position: absolute;
+        right: 0px;
+        top: 0px;
+    }
+
+    .nav>.nav-btn>label {
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        padding: 13px;
+    }
+
+    .nav>.nav-btn>label:hover,
+    .nav #nav-check:checked~.nav-btn>label {
+        background-color: #330033;
+        ;
+        /* Couleur de survol vers #404 */
+    }
+
+    .nav>.nav-btn>label>span {
+        display: block;
+        width: 25px;
+        height: 10px;
+        border-top: 2px solid #fff;
+        /* Ligne blanche pour l'icône du menu */
+    }
+
+    .nav>.nav-links {
+        position: absolute;
+        display: block;
+        width: 100%;
+        background-color: #404;
+        /* Couleur de fond violette avec des nuances de rouge foncé */
+        height: 0px;
+        transition: all 0.3s ease-in;
+        overflow-y: hidden;
+        top: 50px;
+        left: 0px;
+    }
+
+    .nav>.nav-links>a {
+        display: block;
+        width: 100%;
+    }
+
+    .nav>#nav-check:not(:checked)~.nav-links {
+        height: 0px;
+    }
+
+    .nav>#nav-check:checked~.nav-links {
+        height: calc(100vh - 50px);
+        overflow-y: auto;
+    }
 }

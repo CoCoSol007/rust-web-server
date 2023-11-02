@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About me-Page</title>
+    <link rel="stylesheet" href="style">
+
+</head>
+
+<body>
+    <div class="nav">
+        <input type="checkbox" id="nav-check">
+        <div class="nav-header">
+            <div class="nav-title">
+                CoCo_Sol - About Me
+            </div>
+        </div>
+        <div class="nav-btn">
+            <label for="nav-check">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+        </div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/articles">Articles</a>
+            <a href="/images">Images</a>
+            <a href="about_me">About Me</a>
+        </div>
+    </div>
+    <main class="main-box">
+        <h1 class="main-title">About me</h1>
+
+        <br>
+        <p>
+
+            Hello World ! <br>
+            My name is Corentin SOLOIS (CoCo_Sol).<br>
+            I'm 16 years old and I am a French coder with not much experience but a strong desire to learn.<br>
+            On this BLOG, I will discuss my projects, share some thoughts on mathematics,<br>
+            or delve into the reason for existence.<br>
+            Or simply programming projects!<br>
+            <br>
+            I know this blog isn't look good but...<br>
+            I don't care<br>
+
+        </p>
+        <script>
+            function redirigerVersPage(url) {
+                // Redirige vers l'URL spécifiée en fonction du bouton cliqué
+                window.location.href = url;
+            }
+        </script>
+
+
+        <h2>Contact me</h2>
+        <button class="url-button"
+            onclick="redirigerVersPage('mailto:solois.corentin@gmail.com?subject=By Blog')">E-mail</button>
+
+        <h2>Or view my Github</h2>
+        <button class="url-button" onclick="redirigerVersPage('https://github.com/cocosol007')">Github</button>
+
+
+        <script>
+            function redirigerVersPage(url) {
+                // Redirige vers l'URL spécifiée en fonction du bouton cliqué
+                window.location.href = url;
+            }
+        </script>
+
+    </main>
+</body>
+
+</html>
