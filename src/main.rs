@@ -223,7 +223,9 @@ async fn get_article_page(uid: Uuid) -> (ContentType, String) {
         </div>
         <main class="main-box">
                 <h1>{}</h1>
-                <img src="/api/image/{}"></img>
+                <div class="centered-image"> 
+                    <img class="main-image" src="/api/image/{}"> 
+                </div>
             </main>
 
         </body>
