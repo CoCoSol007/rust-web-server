@@ -67,7 +67,17 @@ struct Article {
     /// The path of the image of the article.
     image_path: String,
 }
-
+#[derive(FromForm)]
+struct ArticlePost<'f> {
+    /// The name of the article.
+    title: String,
+    /// The introduction of the article.
+    intro: String,
+    /// The content of the article.
+    content: Vec<String>,
+    /// The path of the image of the article.
+    image: TempFile<'f>,
+}
 /// a function to get an article with its id.
 #[get("/article/<id>")]
 async fn get_article(id: Uuid) -> Option<Json<Article>> {
@@ -88,14 +98,27 @@ async fn list_articles() -> Json<Vec<Uuid>> {
 }
 
 /// a function to add an article.
-#[post("/new_article", data = "<article>")]
-async fn add_article(cookies: &CookieJar<'_>, article: Option<rocket::form::Form<Article>>) {
+#[post("/new_article", format = "multipart/form-data", data = "<article>")]
+async fn add_article<'f>(
+    cookies: &CookieJar<'_>,
+    article: Option<Form<ArticlePost<'_>>>,
+) -> Redirect {
     if !is_admin(cookies) {
         println!("error: POST request without grade admin");
-    } else if let Some(article) = article {
-        let article = article.into_inner();
+        Redirect::to("/")
+    } else if let Some(article_post) = article {
+        let article_post = article_post.into_inner();
         // On cree une nouvelle id.
         let id = Uuid::new_v4();
+
+        let article = Article {
+            title: article_post.title,
+            intro: article_post.intro,
+            content: article_post.content,
+            image_path: article_post.image.name().unwrap().to_string(),
+        };
+
+        upload_image(article_post.image).await;
 
         // On stocke l'article dans un la static.
         ARTICLES.write().await.insert(id, article);
@@ -120,23 +143,19 @@ async fn add_article(cookies: &CookieJar<'_>, article: Option<rocket::form::Form
         if let Err(e) = handle {
             println!("error: {:?}", e);
         }
+        Redirect::to("/admin")
     } else {
         println!("error: POST request without same data");
+        Redirect::to("/admin")
     }
 }
 
-#[derive(FromForm)]
-struct Upload<'f> {
-    file: TempFile<'f>,
-}
-
-#[post("/upload", format = "multipart/form-data", data = "<form>")]
-async fn upload_image(mut form: Form<Upload<'_>>) -> std::io::Result<()> {
-    let file_name: Option<&str> = form.file.name();
+async fn upload_image<'f>(mut form: TempFile<'f>) -> std::io::Result<()> {
+    let file_name: Option<&str> = form.name();
     if let Some(name) = file_name {
         let file_name = String::from("static/") + name + ".png";
 
-        form.file.persist_to(file_name).await?;
+        form.persist_to(file_name).await?;
 
         Ok(())
     } else {
@@ -222,13 +241,7 @@ async fn rocket() -> _ {
         .mount("/", routes![favicon])
         .mount(
             "/api",
-            routes![
-                get_article,
-                list_articles,
-                add_article,
-                upload_image,
-                get_image
-            ],
+            routes![get_article, list_articles, add_article, get_image],
         )
         .mount("/admin", routes![login_admin, admin_main, new_article])
 }

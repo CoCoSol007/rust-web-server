@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amin</title>
+    <title>Admin</title>
     <link rel="stylesheet" href="/style">
 
 </head>
@@ -34,24 +34,26 @@
         <h1 class="main-title">ADMIN PAGE</h1>
         <br>
 
-        <form method="POST" action="/admin/new_article">
+        <form method="POST" action="/api/new_article" , enctype="multipart/form-data">
             <label for="title">Titre de l'article:</label>
             <input type="text" name="title" id="title" required><br><br>
 
             <label for="content">Intro :</label>
-            <textarea name="Intro" id="content" required></textarea><br><br>
+            <textarea name="intro" id="content" required></textarea><br><br>
 
-            <div id="sections"></div>
-
-
+            <div id="sections">
+                <label for="content">content :</label>
+                <textarea name="content" id="content" required></textarea><br><br>
+            </div>
 
             <label for="image">Image:</label>
             <input type="file" name="image" id="image" required>
 
+
+            <button onclick="addSection()">add section</button><br><br>
             <input type="submit" value="Créer l'article">
         </form>
 
-        <button onclick="addSection()">add section</button>
 
         <script>
             // Fonction pour ajouter une section de texte
@@ -66,12 +68,7 @@
             }
 
         </script>
-
-
-
     </main>
-
-
 </body>
 
 </html>
