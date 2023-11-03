@@ -160,23 +160,33 @@ fn get_image(path: String) -> (ContentType, File) {
 }
 
 /// a function to login as admin.
-#[get("/login/<password>")]
+#[post("/login", data = "<password>")]
 async fn login_admin(cookies: &CookieJar<'_>, password: String) -> Redirect {
-    if sha1_hash(&password) == "5ed25af7b1ed23fb00122e13d7f74c4d8262acd8" {
+    if sha1_hash(&password) == "0e8388d85abbb460763881d334ba6593f1199977" {
         // on ajoute le cookie prive
         cookies.add_private(Cookie::new("admin", "true"));
-        Redirect::to("/admin")
-    } else {
-        Redirect::to("/admin/login")
     }
+    Redirect::to("/admin")
 }
 
 #[get("/")]
 fn admin_main(cookies: &CookieJar<'_>) -> (ContentType, &'static str) {
     if is_admin(cookies) {
-        (ContentType::HTML, include_str!("webpages/new_article.html"))
+        (ContentType::HTML, include_str!("webpages/admin/main.html"))
     } else {
-        (ContentType::HTML, include_str!("webpages/login.html"))
+        (ContentType::HTML, include_str!("webpages/admin/login.html"))
+    }
+}
+
+#[get("/new_article")]
+fn new_article(cookies: &CookieJar<'_>) -> (ContentType, &'static str) {
+    if is_admin(cookies) {
+        (
+            ContentType::HTML,
+            include_str!("webpages/admin/new_article.html"),
+        )
+    } else {
+        (ContentType::HTML, include_str!("webpages/admin/login.html"))
     }
 }
 
@@ -192,16 +202,6 @@ fn is_admin(cookies: &CookieJar<'_>) -> bool {
     cookies
         .get_private("admin")
         .map_or(false, |cookie| cookie.value() == "true")
-}
-
-/// a function to check if cookie is admin.
-#[get("/check_admin")]
-fn check_admin(cookies: &CookieJar<'_>) -> String {
-    if is_admin(cookies) {
-        "true".to_string()
-    } else {
-        "false".to_string()
-    }
 }
 
 /// The main function of the website.
@@ -230,5 +230,5 @@ async fn rocket() -> _ {
                 get_image
             ],
         )
-        .mount("/admin", routes![login_admin, check_admin, admin_main])
+        .mount("/admin", routes![login_admin, admin_main, new_article])
 }

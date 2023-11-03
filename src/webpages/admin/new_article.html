@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amin</title>
+    <link rel="stylesheet" href="/style">
+
+</head>
+
+<body>
+    <div class="nav">
+        <input type="checkbox" id="nav-check">
+        <div class="nav-header">
+            <div class="nav-title">
+                CoCo_Sol - New Article
+            </div>
+        </div>
+        <div class="nav-btn">
+            <label for="nav-check">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+        </div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/articles">Articles</a>
+            <a href="about_me">About Me</a>
+        </div>
+    </div>
+    <main class="main-box">
+        <h1 class="main-title">ADMIN PAGE</h1>
+        <br>
+
+        <form method="POST" action="/admin/new_article">
+            <label for="title">Titre de l'article:</label>
+            <input type="text" name="title" id="title" required><br><br>
+
+            <label for="content">Intro :</label>
+            <textarea name="Intro" id="content" required></textarea><br><br>
+
+            <div id="sections"></div>
+
+
+
+            <label for="image">Image:</label>
+            <input type="file" name="image" id="image" required>
+
+            <input type="submit" value="Créer l'article">
+        </form>
+
+        <button onclick="addSection()">add section</button>
+
+        <script>
+            // Fonction pour ajouter une section de texte
+            function addSection() {
+                const sectionsDiv = document.getElementById("sections");
+                newSection.innerHTML = `
+                    <label for="content">Contenu de l'article :</label>
+                    <textarea name="content" id="content" required></textarea><br><br>
+                `;
+                sectionsDiv.appendChild(newSection);
+            }
+
+        </script>
+
+
+
+    </main>
+
+
+</body>
+
+</html>
