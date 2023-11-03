@@ -41,6 +41,7 @@ raw_files! {
     "/about_me" => aboute_me_page(HTML, "webpages/about_me.html"),
     "/articles" => articles_page(HTML, "webpages/articles.html"),
     "/images" => images_page(HTML, "webpages/images.html"),
+    "/article/<_>" => article_page(HTML, "webpages/article.html"),
 }
 
 /// a struct to store articles.
@@ -182,65 +183,6 @@ fn check_admin(cookies: &CookieJar<'_>) -> String {
     }
 }
 
-/// a function to get an article that return a web page.
-#[get("/article/<uid>")]
-async fn get_article_page(uid: Uuid) -> (ContentType, String) {
-    let json_data = get_article(uid).await;
-
-    if let Some(json_data) = json_data {
-        let data = json_data.into_inner();
-
-        let html_content = format!(
-            r#"
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="utf-8">
-            <title>Article</title>
-            <link rel="stylesheet" href="/style">
-        </head>
-        <body>
-            <div class="nav">
-            <input type="checkbox" id="nav-check">
-            <div class="nav-header">
-                <div class="nav-title">
-                    CoCo_Sol - About Me
-                </div>
-            </div>
-            <div class="nav-btn">
-                <label for="nav-check">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </label>
-            </div>
-            <div class="nav-links">
-                <a href="/">Home</a>
-                <a href="/articles">Articles</a>
-                <a href="/images">Images</a>
-                <a href="about_me">About Me</a>
-            </div>
-        </div>
-        <main class="main-box">
-                <h1>{}</h1>
-                <div class="centered-image"> 
-                    <img class="main-image" src="/api/image/{}"> 
-                </div>
-            </main>
-
-        </body>
-        </html>
-        "#,
-            data.title.clone(),
-            data.image_path
-        );
-
-        (ContentType::HTML, html_content.to_owned())
-    } else {
-        (ContentType::HTML, "Article not found".to_owned())
-    }
-}
-
 /// The main function of the website.
 #[launch]
 async fn rocket() -> _ {
@@ -256,7 +198,6 @@ async fn rocket() -> _ {
             ..Default::default()
         })
         .mount("/", raw_routes())
-        .mount("/", routes![get_article_page])
         .mount(
             "/api",
             routes![

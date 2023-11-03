@@ -33,7 +33,43 @@
     </div>
     <main class="main-box">
         <h1 class="main-title">Home Page</h1>
+        <br>
+
+        <div id="content-articles">
+            <h2>articles you must like</h2>
+        </div>
+
+        <script>
+            // article random
+            fetch("/api/articles").then(response => response.json()).then(data => {
+                for (id_article in data) {
+                    if (id_article < 2) {
+                        fetch("/api/article/" + data[id_article]).then(response => response.json()).then(article => {
+
+                            const content = document.getElementById("content-articles");
+                            const button = document.createElement("button");
+                            button.classList.add("article-button");
+                            button.onclick = () => window.location.href = "/article/" + data[id_article];
+
+                            const title = document.createElement("h3");
+                            title.textContent = article.title;
+                            button.appendChild(title);
+
+                            const image = document.createElement("img");
+                            image.src = "/api/image/" + article.image_path;
+                            image.classList.add("article-image");
+                            button.appendChild(image);
+
+                            content.appendChild(button);
+                        })
+                    }
+                }
+            })
+        </script>
+
     </main>
+
+
 </body>
 
 </html>

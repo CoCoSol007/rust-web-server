@@ -1,19 +1,19 @@
 {
   "6fc13024-c4fd-4112-a5e3-6352fff0fd8d": {
     "title": "Article 1",
-    "intro": "a",
+    "intro": "a\nb",
     "content": [
-      "a",
-      "a"
+      "1\n1.5",
+      "2\n2.5"
     ],
     "image_path": "image.png"
   },
   "6fc13024-c4fd-4112-a5e4-6352fff0fd8d": {
     "title": "Article 2",
-    "intro": "a",
+    "intro": "a\nb",
     "content": [
-      "a",
-      "a"
+      "1\n1.5",
+      "2\n2.5"
     ],
     "image_path": "image.png"
   }
