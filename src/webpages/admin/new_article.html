@@ -57,8 +57,9 @@
             // Fonction pour ajouter une section de texte
             function addSection() {
                 const sectionsDiv = document.getElementById("sections");
+                const newSection = document.createElement("div");
                 newSection.innerHTML = `
-                    <label for="content">Contenu de l'article :</label>
+                    <label for="content">content :</label>
                     <textarea name="content" id="content" required></textarea><br><br>
                 `;
                 sectionsDiv.appendChild(newSection);
