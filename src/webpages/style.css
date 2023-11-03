@@ -25,6 +25,11 @@ body {
     background-color: #404;
 }
 
+.padding-text {
+    padding-top: 5%;
+    text-align: center;
+}
+
 .url-button {
     transition-duration: 0.5s;
     width: 20%;
@@ -54,12 +59,12 @@ body {
 }
 
 #content-articles>button:hover {
-    width: 90%;
     background-color: #1a001a65;
 }
 
 #content-articles>button>.article-image {
     opacity: 0;
+    max-width: 100%;
     max-height: 0;
     overflow: hidden;
     transition: opacity 0.3s ease, max-height 0.3s ease;
@@ -68,6 +73,7 @@ body {
 
 #content-articles>button:hover>.article-image {
     opacity: 1;
+    max-width: 100%;
     max-height: 250px;
 }
 

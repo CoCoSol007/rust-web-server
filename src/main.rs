@@ -4,6 +4,7 @@ use once_cell::sync::Lazy;
 use rocket::form::{Form, FromForm};
 use rocket::fs::TempFile;
 use rocket::http::{Cookie, CookieJar};
+use rocket::response::Redirect;
 use rocket::serde::uuid::Uuid;
 use rocket::{
     get, http::ContentType, launch, post, routes, serde::json::Json, tokio::sync::RwLock, Config,
@@ -40,8 +41,15 @@ raw_files! {
     "/" => main_page(HTML, "webpages/main.html"),
     "/about_me" => aboute_me_page(HTML, "webpages/about_me.html"),
     "/articles" => articles_page(HTML, "webpages/articles.html"),
-    "/images" => images_page(HTML, "webpages/images.html"),
     "/article/<_>" => article_page(HTML, "webpages/article.html"),
+}
+
+#[get("/favicon.ico")]
+const fn favicon() -> (ContentType, &'static [u8]) {
+    let ico_data: &'static [u8] = include_bytes!("webpages/logo.ico");
+    let content_type = ContentType::Icon;
+
+    (content_type, ico_data)
 }
 
 /// a struct to store articles.
@@ -153,12 +161,25 @@ fn get_image(path: String) -> (ContentType, File) {
 
 /// a function to login as admin.
 #[get("/login/<password>")]
-async fn login_admin(cookies: &CookieJar<'_>, password: String) {
+async fn login_admin(cookies: &CookieJar<'_>, password: String) -> Redirect {
     if sha1_hash(&password) == "5ed25af7b1ed23fb00122e13d7f74c4d8262acd8" {
         // on ajoute le cookie prive
         cookies.add_private(Cookie::new("admin", "true"));
+        Redirect::to("/admin")
+    } else {
+        Redirect::to("/admin/login")
     }
 }
+
+#[get("/")]
+fn admin_main(cookies: &CookieJar<'_>) -> (ContentType, &'static str) {
+    if is_admin(cookies) {
+        (ContentType::HTML, include_str!("webpages/new_article.html"))
+    } else {
+        (ContentType::HTML, include_str!("webpages/login.html"))
+    }
+}
+
 /// a function to hash a string.
 fn sha1_hash(input: &str) -> String {
     let mut hasher = Sha1::new();
@@ -198,6 +219,7 @@ async fn rocket() -> _ {
             ..Default::default()
         })
         .mount("/", raw_routes())
+        .mount("/", routes![favicon])
         .mount(
             "/api",
             routes![
@@ -208,5 +230,5 @@ async fn rocket() -> _ {
                 get_image
             ],
         )
-        .mount("/admin", routes![login_admin, check_admin])
+        .mount("/admin", routes![login_admin, check_admin, admin_main])
 }
