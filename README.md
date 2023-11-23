@@ -1,1 +1,1 @@
-# An simple web server using rocket in rust
+# A simple web server using rocket in rust
